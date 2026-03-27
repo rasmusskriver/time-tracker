@@ -1,5 +1,5 @@
 import { startSession, stopSession, statusSession } from "./timer";
-import { weeklyReport, dailyReport } from "./report";
+import { weeklyReport, dailyReport, streakReport } from "./report";
 import { readGoals } from "./goals";
 
 const command = process.argv[2];
@@ -50,7 +50,11 @@ switch (command) {
     dailyReport();
     break;
 
+  case "streak":
+    streakReport();
+    break;
+
   default:
-    console.log("Ukendt kommando. Brug: start | stop | status | report | report:day");
+    console.log("Ukendt kommando. Brug: start | stop | status | report | report:day | streak");
     process.exit(1);
 }

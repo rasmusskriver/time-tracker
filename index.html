@@ -185,7 +185,7 @@
 
     async function init() {
       const res = await fetch("/api/data");
-      const { log, goals } = await res.json();
+      const { log, goals, streaks } = await res.json();
 
       const now = new Date();
       document.getElementById("updated").textContent =
@@ -326,6 +326,10 @@
               acc + (new Date(s.end) - new Date(s.start)) / 3600000, 0));
           const pct = Math.min(100, Math.round((logged / goal.weeklyHours) * 100));
           const done = pct >= 100;
+          const streak = streaks?.[project] ?? 0;
+          const streakLabel = streak === 0
+            ? "ingen streak"
+            : `${streak} uge${streak !== 1 ? "r" : ""} i træk`;
 
           barsEl.innerHTML += `
             <div class="goal-row">
@@ -336,10 +340,11 @@
               <div class="goal-pct">${pct}%</div>
             </div>
             <div style="font-size:0.75rem;color:#444;margin-bottom:1rem;margin-left:98px">
-              ${fmtHours(logged)} / ${goal.weeklyHours}t m\u00e5l
+              ${fmtHours(logged)} / ${goal.weeklyHours}t mål &nbsp;·&nbsp; ${streakLabel}
             </div>
           `;
         }
+      }
       }
     }
 

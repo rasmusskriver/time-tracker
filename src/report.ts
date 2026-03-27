@@ -50,6 +50,89 @@ export function weeklyReport(): void {
   console.log();
 }
 
+export function streakReport(): void {
+  const log = readLog();
+  const goals = readGoals();
+  const goalProjects = Object.keys(goals);
+
+  if (goalProjects.length === 0) {
+    console.log("Ingen projekter med mål i goals.json.");
+    return;
+  }
+
+  // Find den tidligste session for at vide hvor langt vi kan gå tilbage
+  const oldest = log.reduce<Date | null>((min, s) => {
+    const d = new Date(s.start);
+    return min === null || d < min ? d : min;
+  }, null);
+
+  if (!oldest) {
+    console.log("Ingen sessions i loggen.");
+    return;
+  }
+
+  console.log(`\nStreak rapport`);
+  console.log("─".repeat(40));
+
+  for (const project of goalProjects) {
+    const goal = goals[project].weeklyHours;
+    let streak = 0;
+    let weekOffset = 0;
+    const now = new Date();
+
+    // Gå bagud uge for uge
+    while (true) {
+      const refDate = new Date(now);
+      refDate.setDate(refDate.getDate() - weekOffset * 7);
+      const weekStart = getStartOfWeek(refDate);
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekEnd.getDate() + 7);
+
+      // Stop hvis vi er før den ældste session
+      if (weekEnd < oldest) break;
+
+      // Nuværende uge tæller ikke — kun afsluttede uger
+      if (weekOffset === 0) {
+        weekOffset++;
+        continue;
+      }
+
+      const sessionsThisWeek = log.filter(
+        (s) => s.project === project && new Date(s.start) >= weekStart && new Date(s.start) < weekEnd
+      );
+
+      const hoursThisWeek = sessionsThisWeek.reduce(
+        (sum, s) => sum + durationHours(s),
+        0
+      );
+
+      if (hoursThisWeek >= goal) {
+        streak++;
+      } else {
+        break;
+      }
+
+      weekOffset++;
+    }
+
+    // Check om indeværende uge allerede er på vej til at opfylde målet
+    const thisWeekStart = getStartOfWeek(now);
+    const thisWeekSessions = log.filter(
+      (s) => s.project === project && new Date(s.start) >= thisWeekStart
+    );
+    const thisWeekHours = thisWeekSessions.reduce(
+      (sum, s) => sum + durationHours(s),
+      0
+    );
+    const thisWeekPct = Math.round((thisWeekHours / goal) * 100);
+
+    const streakLabel = streak === 0 ? "ingen streak" : `${streak} uge${streak !== 1 ? "r" : ""} i træk`;
+    console.log(`  ${project}: ${streakLabel}  |  denne uge: ${formatHours(thisWeekHours)} / ${goal}t (${thisWeekPct}%)`);
+  }
+
+  console.log();
+}
+
 export function dailyReport(): void {
   const log = readLog();
   const dayStart = getStartOfDay();
