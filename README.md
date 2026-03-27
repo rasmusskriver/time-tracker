@@ -21,8 +21,8 @@ bun start              # Start session (default projekt: boot.dev)
 bun start <projekt>    # Start session for specifikt projekt
 bun stop               # Stop aktiv session + auto-push til GitHub
 bun status             # Vis aktiv session og elapsed tid
-bun report             # Ugentlig rapport
-bun report:day         # Daglig rapport
+bun report             # Ugentlig rapport med mål og procent
+bun report:day         # Daglig rapport (kun tid, ingen mål)
 ```
 
 ## Mål
@@ -32,7 +32,7 @@ Ugentlige timemål sættes i `goals.json`:
 ```json
 {
   "boot.dev": {
-    "weeklyHours": 10
+    "weeklyHours": 5
   }
 }
 ```
