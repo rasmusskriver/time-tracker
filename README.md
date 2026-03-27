@@ -11,7 +11,7 @@ CLI tool til at logge arbejdstid per projekt. Gemmer sessions i JSON og pusher a
 ```bash
 git clone https://github.com/rasmusskriver/time-tracker.git
 cd time-tracker
-bun install
+bun install  # installerer kun bun-types (dev dependency)
 ```
 
 ## Brug

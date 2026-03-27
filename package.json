@@ -1,0 +1,14 @@
+{
+  "name": "time-tracker",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "bun src/index.ts start",
+    "stop": "bun src/index.ts stop",
+    "status": "bun src/index.ts status",
+    "report": "bun src/index.ts report",
+    "report:day": "bun src/index.ts report:day"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}
