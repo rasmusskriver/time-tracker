@@ -20,6 +20,19 @@ export function startSession(project: string): void {
   writeActiveSession(session);
   console.log(`Session startet for projekt: ${project}`);
   console.log(`Starttid: ${new Date(session.start).toLocaleString("da-DK")}`);
+
+  const drukProjekter = ["alefarm", "øl", "beer", "ale", "bryg", "hops", "ipa", "lager", "stout"];
+  const erDruk = drukProjekter.some((ord) => project.toLowerCase().includes(ord));
+  const time = new Date().getHours();
+  const erSent = time >= 22 || time < 5;
+
+  if (erDruk && erSent) {
+    console.log("Du tracker øl sent om aftenen. Respekt — men tag det roligt.");
+  } else if (erDruk) {
+    console.log("Øl som projekt. Det tæller.");
+  } else if (erSent) {
+    console.log("Sent igang. Er du sikker på du er skarp nok?");
+  }
 }
 
 export async function stopSession(): Promise<void> {
