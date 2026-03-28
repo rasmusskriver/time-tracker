@@ -22,6 +22,7 @@ bun start <projekt>    # Start session for specifikt projekt
 bun stop               # Stop aktiv session + auto-push til GitHub
 bun status             # Vis aktiv session og elapsed tid
 bun report             # Ugentlig rapport med mål og procent
+bun streak             # Streak rapport
 bun report:day         # Daglig rapport (kun tid, ingen mål)
 ```
 
