@@ -26,6 +26,7 @@ goals.json    # Ugentlige timemål per projekt
 bun start [projekt]   # Start session (default: boot.dev)
 bun stop              # Stop + auto-push til GitHub
 bun status            # Vis aktiv session
+bun streak            # Streak rapport
 bun report            # Ugentlig rapport
 bun report:day        # Daglig rapport
 ```
@@ -33,13 +34,19 @@ bun report:day        # Daglig rapport
 ## Dataformat
 
 **data/log.json** — array af sessions:
+
 ```json
 [
-  { "project": "boot.dev", "start": "2026-03-27T20:00:00.000Z", "end": "2026-03-27T21:00:00.000Z" }
+  {
+    "project": "boot.dev",
+    "start": "2026-03-27T20:00:00.000Z",
+    "end": "2026-03-27T21:00:00.000Z"
+  }
 ]
 ```
 
 **data/session.json** — aktiv session (eksisterer kun mens en session kører):
+
 ```json
 { "project": "boot.dev", "start": "2026-03-27T20:00:00.000Z" }
 ```
@@ -47,6 +54,7 @@ bun report:day        # Daglig rapport
 ## GitHub auto-push
 
 `src/git.ts` kører efter hver `stop`:
+
 1. `git add data/log.json`
 2. `git commit -m "Update log [<ISO timestamp>]"`
 3. `git push`
@@ -56,6 +64,7 @@ Remote er konfigureret til `https://github.com/rasmusskriver/time-tracker.git`.
 ## Tilføj nyt projekt
 
 Tilføj projektet i `goals.json`:
+
 ```json
 {
   "boot.dev": { "weeklyHours": 10 },
