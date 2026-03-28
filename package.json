@@ -7,6 +7,7 @@
     "status": "bun src/index.ts status",
     "report": "bun src/index.ts report",
     "report:day": "bun src/index.ts report:day",
+    "streak": "bun src/index.ts streak",
     "deploy": "git push"
   },
   "devDependencies": {

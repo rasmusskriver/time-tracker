@@ -8,8 +8,9 @@ function durationHours(session: Session): number {
 }
 
 function formatHours(hours: number): string {
-  const h = Math.floor(hours);
-  const m = Math.round((hours - h) * 60);
+  const totalMinutes = Math.round(hours * 60);
+  const h = Math.floor(totalMinutes / 60);
+  const m = totalMinutes % 60;
   if (h === 0) return `${m}min`;
   if (m === 0) return `${h}t`;
   return `${h}t ${m}min`;
@@ -48,6 +49,13 @@ export function weeklyReport(): void {
     console.log(`  ${project}:${bar}${pct}`);
   }
   console.log();
+}
+
+function progressBar(value: number, max: number, width: number = 20): string {
+  const pct = Math.min(value / max, 1);
+  const filled = Math.round(pct * width);
+  const empty = width - filled;
+  return "[" + "█".repeat(filled) + "░".repeat(empty) + "]";
 }
 
 export function streakReport(): void {
@@ -125,9 +133,24 @@ export function streakReport(): void {
       0
     );
     const thisWeekPct = Math.round((thisWeekHours / goal) * 100);
+    const bar = progressBar(thisWeekHours, goal);
 
-    const streakLabel = streak === 0 ? "ingen streak" : `${streak} uge${streak !== 1 ? "r" : ""} i træk`;
-    console.log(`  ${project}: ${streakLabel}  |  denne uge: ${formatHours(thisWeekHours)} / ${goal}t (${thisWeekPct}%)`);
+    const streakLabel =
+      streak === 0
+        ? "ingen streak endnu"
+        : `★ ${streak} uge${streak !== 1 ? "r" : ""} i træk`;
+
+    let weekStatus: string;
+    if (thisWeekHours >= goal) {
+      weekStatus = `${bar} ${formatHours(thisWeekHours)} / ${goal}t (${thisWeekPct}%) — streak forlænges!`;
+    } else {
+      const mangler = goal - thisWeekHours;
+      weekStatus = `${bar} ${formatHours(thisWeekHours)} / ${goal}t (${thisWeekPct}%) — mangler ${formatHours(mangler)}`;
+    }
+
+    console.log(`  ${project}`);
+    console.log(`    Streak:     ${streakLabel}`);
+    console.log(`    Denne uge:  ${weekStatus}`);
   }
 
   console.log();
