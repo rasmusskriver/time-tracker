@@ -1,13 +1,13 @@
-import { readLog, Session } from "./log";
-import { readGoals, getStartOfWeek, getStartOfDay } from "./goals";
+import { readLog } from "./log.js";
+import { readGoals, getStartOfWeek, getStartOfDay } from "./goals.js";
 
-function durationHours(session: Session): number {
+function durationHours(session) {
   const start = new Date(session.start).getTime();
   const end = new Date(session.end).getTime();
   return (end - start) / 3600000;
 }
 
-function formatHours(hours: number): string {
+function formatHours(hours) {
   const totalMinutes = Math.round(hours * 60);
   const h = Math.floor(totalMinutes / 60);
   const m = totalMinutes % 60;
@@ -16,7 +16,7 @@ function formatHours(hours: number): string {
   return `${h}t ${m}min`;
 }
 
-export function weeklyReport(): void {
+export function weeklyReport() {
   const log = readLog();
   const goals = readGoals();
   const weekStart = getStartOfWeek();
@@ -25,7 +25,7 @@ export function weeklyReport(): void {
     (s) => new Date(s.start) >= weekStart
   );
 
-  const totals: Record<string, number> = {};
+  const totals = {};
   for (const session of thisWeek) {
     totals[session.project] = (totals[session.project] || 0) + durationHours(session);
   }
@@ -51,14 +51,14 @@ export function weeklyReport(): void {
   console.log();
 }
 
-function progressBar(value: number, max: number, width: number = 20): string {
+function progressBar(value, max, width = 20) {
   const pct = Math.min(value / max, 1);
   const filled = Math.round(pct * width);
   const empty = width - filled;
   return "[" + "█".repeat(filled) + "░".repeat(empty) + "]";
 }
 
-export function streakReport(): void {
+export function streakReport() {
   const log = readLog();
   const goals = readGoals();
   const goalProjects = Object.keys(goals);
@@ -69,7 +69,7 @@ export function streakReport(): void {
   }
 
   // Find den tidligste session for at vide hvor langt vi kan gå tilbage
-  const oldest = log.reduce<Date | null>((min, s) => {
+  const oldest = log.reduce((min, s) => {
     const d = new Date(s.start);
     return min === null || d < min ? d : min;
   }, null);
@@ -140,7 +140,7 @@ export function streakReport(): void {
         ? "ingen streak endnu"
         : `★ ${streak} uge${streak !== 1 ? "r" : ""} i træk`;
 
-    let weekStatus: string;
+    let weekStatus;
     if (thisWeekHours >= goal) {
       weekStatus = `${bar} ${formatHours(thisWeekHours)} / ${goal}t (${thisWeekPct}%) — streak forlænges!`;
     } else {
@@ -156,7 +156,7 @@ export function streakReport(): void {
   console.log();
 }
 
-export function dailyReport(): void {
+export function dailyReport() {
   const log = readLog();
   const dayStart = getStartOfDay();
 
@@ -164,7 +164,7 @@ export function dailyReport(): void {
     (s) => new Date(s.start) >= dayStart
   );
 
-  const totals: Record<string, number> = {};
+  const totals = {};
   for (const session of today) {
     totals[session.project] = (totals[session.project] || 0) + durationHours(session);
   }

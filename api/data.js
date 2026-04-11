@@ -1,18 +1,7 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
 import fs from "fs";
 import path from "path";
 
-interface Session {
-  project: string;
-  start: string;
-  end: string;
-}
-
-interface Goals {
-  [project: string]: { weeklyHours: number };
-}
-
-function getStartOfWeek(date: Date = new Date()): Date {
+function getStartOfWeek(date = new Date()) {
   const d = new Date(date);
   const day = d.getDay();
   const diff = d.getDate() - day + (day === 0 ? -6 : 1);
@@ -21,15 +10,15 @@ function getStartOfWeek(date: Date = new Date()): Date {
   return d;
 }
 
-function durationHours(s: Session): number {
+function durationHours(s) {
   return (new Date(s.end).getTime() - new Date(s.start).getTime()) / 3600000;
 }
 
-function computeStreaks(log: Session[], goals: Goals): Record<string, number> {
-  const streaks: Record<string, number> = {};
+function computeStreaks(log, goals) {
+  const streaks = {};
   const now = new Date();
 
-  const oldest = log.reduce<Date | null>((min, s) => {
+  const oldest = log.reduce((min, s) => {
     const d = new Date(s.start);
     return min === null || d < min ? d : min;
   }, null);
@@ -72,15 +61,15 @@ function computeStreaks(log: Session[], goals: Goals): Record<string, number> {
   return streaks;
 }
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
+export default function handler(req, res) {
   const logPath = path.join(process.cwd(), "data", "log.json");
   const goalsPath = path.join(process.cwd(), "goals.json");
 
-  const log: Session[] = fs.existsSync(logPath)
+  const log = fs.existsSync(logPath)
     ? JSON.parse(fs.readFileSync(logPath, "utf-8"))
     : [];
 
-  const goals: Goals = fs.existsSync(goalsPath)
+  const goals = fs.existsSync(goalsPath)
     ? JSON.parse(fs.readFileSync(goalsPath, "utf-8"))
     : {};
 

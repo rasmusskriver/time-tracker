@@ -1,6 +1,6 @@
 import { exec } from "child_process";
 
-export function pushToGitHub(): Promise<void> {
+export function pushToGitHub() {
   return new Promise((resolve, reject) => {
     const cmd = `git add data/log.json && git commit -m "Update log [${new Date().toISOString()}]" && git push`;
     exec(cmd, (err, stdout, stderr) => {

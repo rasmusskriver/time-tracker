@@ -3,10 +3,10 @@ import {
   writeActiveSession,
   clearActiveSession,
   appendSession,
-} from "./log";
-import { pushToGitHub } from "./git";
+} from "./log.js";
+import { pushToGitHub } from "./git.js";
 
-export function startSession(project: string): void {
+export function startSession(project) {
   const existing = readActiveSession();
   if (existing) {
     console.log(
@@ -35,7 +35,7 @@ export function startSession(project: string): void {
   }
 }
 
-export async function stopSession(): Promise<void> {
+export async function stopSession() {
   const active = readActiveSession();
   if (!active) {
     console.log("Ingen aktiv session. Kør \"bun start\" for at starte en.");
@@ -65,7 +65,7 @@ export async function stopSession(): Promise<void> {
   await pushToGitHub();
 }
 
-export function statusSession(): void {
+export function statusSession() {
   const active = readActiveSession();
   if (!active) {
     console.log("Ingen aktiv session.");

@@ -1,11 +1,11 @@
-import { startSession, stopSession, statusSession } from "./timer";
-import { weeklyReport, dailyReport, streakReport } from "./report";
-import { readGoals } from "./goals";
+import { startSession, stopSession, statusSession } from "./timer.js";
+import { weeklyReport, dailyReport, streakReport } from "./report.js";
+import { readGoals } from "./goals.js";
 
 const command = process.argv[2];
 const arg = process.argv[3];
 
-async function promptProject(): Promise<string> {
+async function promptProject() {
   const goals = readGoals();
   const projects = Object.keys(goals);
 
