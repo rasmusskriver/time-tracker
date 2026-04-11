@@ -31,7 +31,7 @@ async function promptProject(): Promise<string> {
 
 switch (command) {
   case "start":
-    startSession(arg ?? await promptProject());
+    startSession(arg ?? (await promptProject()));
     break;
 
   case "stop":
@@ -55,6 +55,8 @@ switch (command) {
     break;
 
   default:
-    console.log("Ukendt kommando. Brug: start | stop | status | report | report:day | streak");
+    console.log(
+      "Ukendt kommando. Brug: start | stop | status | report | report:day | streak",
+    );
     process.exit(1);
 }
