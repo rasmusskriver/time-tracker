@@ -51,12 +51,34 @@ async function promptGenstande() {
   return val;
 }
 
+async function promptTimer() {
+  const svar = prompt("Vil du starte en timer? (ja/nej):");
+  const val = (svar ?? "").trim().toLowerCase();
+  if (val === "ja" || val === "j") {
+    const tid = prompt("Hvor lang tid? (fx 20m, 1h, 90m):");
+    const cleaned = (tid ?? "").trim();
+    if (!cleaned) {
+      console.log("Ingen tid angivet. Springer timer over.");
+      return;
+    }
+    const { spawnSync } = await import("child_process");
+    const result = spawnSync("timer", [cleaned, "--format", "24h", "-n", "Boot.dev"], {
+      stdio: "inherit",
+      detached: true,
+    });
+    if (result.error) {
+      console.log(`Kunne ikke starte timer: ${result.error.message}`);
+    }
+  }
+}
+
 switch (command) {
   case "start": {
     const genstande = await promptGenstande();
     const reaktion = getReaktion(genstande);
     console.log(`\n${reaktion}\n`);
     startSession(arg ?? "boot.dev");
+    await promptTimer();
     break;
   }
 
