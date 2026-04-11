@@ -10,7 +10,7 @@ const HAAN = [
   "0 genstande? Hvad er du, mor? Gay.",
   "Helt ædru. Typisk for en der aldrig når sine mål.",
   "Du coder sober? Det er decideret homo.",
-  "Tag dog en øl, du falder i søvn over tastaturet.",
+  "Tag dog en øl, falder i søvn over dig.",
   "Ædru coding er for folk der ikke har venner.",
 ];
 
@@ -26,7 +26,7 @@ const HYPE = [
   "LAAAAD OS FUCKING GOOOO!! Boot.dev vil frygte dit navn!",
   "DU ER EN GUD. BOOT.DEV TILHØRER DIG I AFTEN.",
   "GENSTANDE HØJE SOM DINE AMBITIONER — USTOPPELIG!!",
-  "FULD SEND!! Tastaturet er dit sværd, boot.dev er fjenden!!",
+  "FULD GAS!! Tastaturet er dit sværd, boot.dev er fjenden!!",
   "JA MIN DRENG!! DU ER UOVERVINDELIG I AFTEN!!",
   "ABSOLUT VANVITTIGT!! INGEN KAN STOPPE DIG NU!!",
 ];
