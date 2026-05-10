@@ -62,13 +62,31 @@ async function promptTimer() {
       return;
     }
     const { spawnSync } = await import("child_process");
-    const result = spawnSync("timer", [cleaned, "--format", "24h", "-n", "Boot.dev"], {
+    const timerResult = spawnSync("timer", [cleaned, "--format", "24h", "-n", "Boot.dev"], {
       stdio: "inherit",
-      detached: true,
     });
-    if (result.error) {
-      console.log(`Kunne ikke starte timer: ${result.error.message}`);
+    if (timerResult.error) {
+      console.log(`Kunne ikke starte timer: ${timerResult.error.message}`);
+      return;
     }
+    if (timerResult.status !== 0) {
+      console.log("Timer blev afbrudt. Springer notifikation over.");
+      return;
+    }
+
+    const notifyResult = spawnSync("notify-send", [
+      "-t",
+      "300000",
+      "-u",
+      "normal",
+      "Boot.dev timer færdig",
+      `${cleaned} er gået.`,
+    ]);
+    if (notifyResult.error) {
+      console.log("Timer færdig.");
+    }
+
+    await stopSession();
   }
 }
 
